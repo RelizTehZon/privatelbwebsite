@@ -1,67 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Список файлов Content</title>
+    <title>Скачать файл</title>
     <style>
-        body { font-family: Arial, Helvetica, sans-serif; max-width: 800px; margin: auto; padding: 20px; }
-        h1 { color: #337ab7; }
-        ul { list-style-type: none; padding: 0; }
-        li { margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
-        button { cursor: pointer; padding: 5px 10px; border-radius: 5px; background-color: #337ab7; color: white; border: none; }
-        button:hover { background-color: #286090; }
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+        .container {
+            text-align: center;
+            width: 300px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,.1);
+            border-radius: 8px;
+            background-color: #fff;
+        }
+        h1 {
+            color: #337ab7;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        a.button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #337ab7;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        a.button:hover {
+            background-color: #286090;
+        }
     </style>
 </head>
 <body>
-    <h1>Файлы из директории Content</h1>
-    <ul id="files-list"></ul>
-
-    <!-- Скрипт для подгрузки файлов -->
-    <script>
-        async function loadFilesFromGitHub(repoOwner, repoName, path) {
-            const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`;
-
-            try {
-                const response = await fetch(url);
-
-                if (!response.ok) {
-                    throw new Error(`Ошибка загрузки данных (${response.status})`);
-                }
-
-                const filesData = await response.json();
-                return filesData.filter(file => file.type === 'file'); // Показываем только файлы
-            } catch(err) {
-                alert('Ошибка загрузки файлов! Проверьте подключение.');
-                console.error(err);
-            }
-        }
-
-        window.onload = async () => {
-            const owner = 'RelizTehZon';
-            const repository = 'privatelbwebsite';
-            const directoryPath = 'main/Content'; // Путь к директории
-
-            const files = await loadFilesFromGitHub(owner, repository, directoryPath);
-
-            const listContainer = document.querySelector('#files-list');
-
-            files.forEach((file) => {
-                const li = document.createElement('li');
-                const filenameText = document.createTextNode(file.name); // Имя файла
-                const downloadButton = document.createElement('button');
-                downloadButton.textContent = 'Скачать';
-                downloadButton.setAttribute('data-url', file.download_url || file.html_url); // Прямая ссылка на скачивание
-                downloadButton.addEventListener('click', (event) => {
-                    event.preventDefault(); // Предотвращаем стандартное поведение кнопки
-                    const url = event.currentTarget.getAttribute('data-url');
-                    window.open(url, '_blank'); // Открываем новое окно браузера для скачивания
-                });
-
-                li.appendChild(filenameText);
-                li.appendChild(downloadButton);
-                listContainer.appendChild(li);
-            });
-        };
-    </script>
+<div class="container">
+    <h1>Скачать файл</h1>
+    <a href="https://1drv.ms/p/c/5c491fcce728a8a4/EchrByXXY9NFnJGBW-ZR_TkBt6iwoiGLFsGbLGflbQOnkQ?e=WDLtdM" class="button" download>Скачать файл</a>
+</div>
 </body>
 </html>
