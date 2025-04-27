@@ -30,7 +30,7 @@
     </style>
 </head>
 <body>
-<h1>Файлы PPTX</h1>
+<h1>Файлы ODP</h1>
 <p>Ниже представлены доступные презентации:</p>
 
 <!-- Список файлов -->
@@ -41,7 +41,7 @@
 async function loadFiles() {
     try {
         // Укажите адрес API GitHub для вашего репозитория и папки с файлами
-        const response = await fetch('https://api.github.com/repos/username/repository-name/contents/path-to-presentation-folder');
+        const response = await fetch('https://github.com/RelizTehZon/privatelbwebsite/blob/main/Content');
 
         if (!response.ok) throw new Error("Ошибка загрузки файла");
 
