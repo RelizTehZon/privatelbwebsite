@@ -47,10 +47,10 @@ async function loadFiles() {
 
         const data = await response.json();
 
-        // Создаем список ссылок для каждого файла формата .pptx
+        // Создаем список ссылок для каждого файла формата .odp
         let fileListElement = document.getElementById('fileList');
         for (let item of data) {
-            if (item.type === 'file' && item.name.endsWith('.pptx')) {
+            if (item.type === 'file' && item.name.endsWith('.odp')) {
                 let link = `<a href="${item.download_url}" target="_blank">${item.name}</a>`;
                 let li = document.createElement('li');
                 li.innerHTML = link;
