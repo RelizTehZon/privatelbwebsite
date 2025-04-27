@@ -7,9 +7,9 @@
         body { font-family: Arial, Helvetica, sans-serif; max-width: 800px; margin: auto; padding: 20px; }
         h1 { color: #337ab7; }
         ul { list-style-type: none; padding: 0; }
-        li { margin-bottom: 10px; }
-        a { text-decoration: none; color: blue; }
-        a:hover { text-decoration: underline; }
+        li { margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+        button { cursor: pointer; padding: 5px 10px; border-radius: 5px; background-color: #337ab7; color: white; border: none; }
+        button:hover { background-color: #286090; }
     </style>
 </head>
 <body>
@@ -29,7 +29,7 @@
                 }
 
                 const filesData = await response.json();
-                return filesData; // Теперь возвращаем ВСЕ объекты, включая директорию и другие типы
+                return filesData.filter(file => file.type === 'file'); // Показываем только файлы
             } catch(err) {
                 alert('Ошибка загрузки файлов! Проверьте подключение.');
                 console.error(err);
@@ -47,11 +47,18 @@
 
             files.forEach((file) => {
                 const li = document.createElement('li');
-                const downloadLink = document.createElement('a');
-                downloadLink.href = file.download_url || file.html_url;
-                downloadLink.textContent = file.name;
-                downloadLink.target = '_blank';
-                li.appendChild(downloadLink);
+                const filenameText = document.createTextNode(file.name); // Имя файла
+                const downloadButton = document.createElement('button');
+                downloadButton.textContent = 'Скачать';
+                downloadButton.setAttribute('data-url', file.download_url || file.html_url); // Прямая ссылка на скачивание
+                downloadButton.addEventListener('click', (event) => {
+                    event.preventDefault(); // Предотвращаем стандартное поведение кнопки
+                    const url = event.currentTarget.getAttribute('data-url');
+                    window.open(url, '_blank'); // Открываем новое окно браузера для скачивания
+                });
+
+                li.appendChild(filenameText);
+                li.appendChild(downloadButton);
                 listContainer.appendChild(li);
             });
         };
