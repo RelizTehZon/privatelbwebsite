@@ -29,7 +29,7 @@
                 }
 
                 const filesData = await response.json();
-                return filesData.filter(file => file.type === 'file'); // Оставляем только файлы
+                return filesData; // Теперь возвращаем ВСЕ объекты, включая директорию и другие типы
             } catch(err) {
                 alert('Ошибка загрузки файлов! Проверьте подключение.');
                 console.error(err);
