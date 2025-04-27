@@ -1,71 +1,60 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PPTX Файлы Репозитория</title>
+    <title>Список файлов Content</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        h1 {
-            color: #337ab7;
-        }
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        li a {
-            display: block;
-            background-color: #f5f5f5;
-            border-radius: 5px;
-            text-decoration: none;
-            color: black;
-            padding: 10px;
-            transition: all .3s ease-in-out;
-        }
-        li a:hover {
-            background-color: #dcdcdc;
-        }
+        body { font-family: Arial, Helvetica, sans-serif; max-width: 800px; margin: auto; padding: 20px; }
+        h1 { color: #337ab7; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin-bottom: 10px; }
+        a { text-decoration: none; color: blue; }
+        a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
-<h1>Файлы ODP</h1>
-<p>Ниже представлены доступные презентации:</p>
+    <h1>Файлы из директории Content</h1>
+    <ul id="files-list"></ul>
 
-<!-- Список файлов -->
-<ul id="fileList"></ul>
+    <!-- Скрипт для подгрузки файлов -->
+    <script>
+        async function loadFilesFromGitHub(repoOwner, repoName, path) {
+            const url = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${path}`;
 
-<script>
-// Функция загрузки списка файлов
-async function loadFiles() {
-    try {
-        // Укажите адрес API GitHub для вашего репозитория и папки с файлами
-        const response = await fetch('https://github.com/RelizTehZon/privatelbwebsite/blob/main/Content');
+            try {
+                const response = await fetch(url);
 
-        if (!response.ok) throw new Error("Ошибка загрузки файла");
+                if (!response.ok) {
+                    throw new Error(`Ошибка загрузки данных (${response.status})`);
+                }
 
-        const data = await response.json();
-
-        // Создаем список ссылок для каждого файла формата .odp
-        let fileListElement = document.getElementById('fileList');
-        for (let item of data) {
-            if (item.type === 'file' && item.name.endsWith('.odp')) {
-                let link = `<a href="${item.download_url}" target="_blank">${item.name}</a>`;
-                let li = document.createElement('li');
-                li.innerHTML = link;
-                fileListElement.appendChild(li);
+                const filesData = await response.json();
+                return filesData.filter(file => file.type === 'file'); // Оставляем только файлы
+            } catch(err) {
+                alert('Ошибка загрузки файлов! Проверьте подключение.');
+                console.error(err);
             }
         }
-    } catch(error) {
-        console.error('Ошибка:', error.message);
-    }
-}
 
-// Загружаем файлы сразу после полной загрузки страницы
-document.addEventListener('DOMContentLoaded', () => {
-    loadFiles();
-});
-</script>
+        window.onload = async () => {
+            const owner = 'RelizTehZon';
+            const repository = 'privatelbwebsite';
+            const directoryPath = 'main/Content'; // Путь к директории
+
+            const files = await loadFilesFromGitHub(owner, repository, directoryPath);
+
+            const listContainer = document.querySelector('#files-list');
+
+            files.forEach((file) => {
+                const li = document.createElement('li');
+                const downloadLink = document.createElement('a');
+                downloadLink.href = file.download_url || file.html_url;
+                downloadLink.textContent = file.name;
+                downloadLink.target = '_blank';
+                li.appendChild(downloadLink);
+                listContainer.appendChild(li);
+            });
+        };
+    </script>
 </body>
 </html>
